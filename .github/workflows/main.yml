@@ -30,6 +30,6 @@ jobs:
       - name: 'GitHub Push'
         uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${{ secrets.TOKEN_PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Print kzz.ics'
         run: cat ./kzz.ics
