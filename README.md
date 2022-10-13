@@ -3,4 +3,4 @@
 
 使用日历软件订阅这个 url 就可以持续收到可转债打新的提醒了：
 
-https://raw.githubusercontent.com/yxjxx/kzz.ics/main/kzz.ics
+https://raw.githubusercontent.com/chasays/kzz.ics/main/kzz.ics
