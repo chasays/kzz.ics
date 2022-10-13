@@ -27,12 +27,9 @@ jobs:
         run: git add .
       - name: 'Git commit'
         run: git commit -m "Add changes"
-      - name: git config -l
-        run: git config -l
       - name: 'GitHub Push'
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.TOKEN }}
-          branch: ${{ github.ref }}
       - name: 'Print kzz.ics'
         run: cat ./kzz.ics
