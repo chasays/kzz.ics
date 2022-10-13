@@ -27,8 +27,8 @@ jobs:
         run: git add .
       - name: 'Git commit'
         run: git commit -m "Add changes"
-      - name: cat ~/.git-credentials
-        run: ~/.git-credentials
+      - name: git config -l
+        run: git config -l
       - name: 'GitHub Push'
         uses: ad-m/github-push-action@v0.6.0
         with:
