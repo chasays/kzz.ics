@@ -27,15 +27,9 @@ jobs:
         run: git add .
       - name: 'Git commit'
         run: git commit -m "Add changes"
-      - name: Commit report
-        run: |
-          git config --global user.name 'GitHub Actio'
-          git config --global user.email 'your-username@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git push
       - name: 'GitHub Push'
         uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN_PAT }}
       - name: 'Print kzz.ics'
         run: cat ./kzz.ics
