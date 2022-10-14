@@ -1,4 +1,4 @@
-name: 'GitHub Actions KZZ Reminder Bot...'
+name: 'GitHub Actions KZZ Reminder Bot'
 
 on:
   push:
@@ -31,5 +31,6 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       - name: 'Print kzz.ics'
         run: cat ./kzz.ics
