@@ -26,7 +26,7 @@ jobs:
       - name: 'Git add '
         run: git add .
       - name: 'Git commit'
-        run: git commit -m "Add changes"
+        run: git commit -m "Commit on $(date)"
       - name: 'GitHub Push'
         uses: ad-m/github-push-action@v0.6.0
         with:
