@@ -65,7 +65,7 @@ def main():
             if start_date >= datetime.now().date():
                 evt = Event()
                 evt.name = i.get('title')
-                # 9:30 - 11:30
+                # 9:30 - 13:30
                 # evt.begin = i.get('start') + ' 01:30:00'
                 # evt.end = i.get('start') + ' 05:30:00'
                 # 00~24:00
