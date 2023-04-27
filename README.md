@@ -1,5 +1,7 @@
 # kzz.ics
 
+> 原始的repo功能失效了，重新实现了下。
+
 理财有风险，投资需谨慎。
 
 [![KZZ](https://github.com/chasays/kzz.ics/actions/workflows/main.yml/badge.svg)](https://github.com/chasays/kzz.ics/actions/workflows/main.yml)
