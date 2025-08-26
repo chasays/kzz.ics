@@ -1,36 +1,78 @@
-name: 'GitHub Actions KZZ Reminder Bot'
+name: 'KZZ Reminder Bot - Auto Update ICS'
 
 on:
   push:
+    branches: [ main, master ]
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 23 * * *'  # 每天 23:00 UTC 运行
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
-  bot:
+  update-ics:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    
     steps:
-      - name: 'Checkout codes'
-        uses: actions/checkout@master
-      - name: 'Pip install ics'
-        run: pip3 install ics
-      - name: 'Pip install requests'
-        run: pip3 install requests         
-      - name: 'Generate ics file'
-        run: bash ./start.sh
-      - name: 'Config user email'
-        run:  git config --local user.email "action@github.com"
-      - name: 'Config user name'
-        run: git config --local user.name "GitHub Action"
-      - name: 'Git diff'
-        run: git diff
-      - name: 'Git add '
-        run: git add .
-      - name: 'Git commit'
-        run: git commit -m "Commit on $(date)"
-      - name: 'GitHub Push'
-        uses: ad-m/github-push-action@v0.6.0
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-      - name: 'Print kzz.ics'
-        run: cat ./kzz.ics
+          fetch-depth: 0  # 获取完整历史用于 git diff
+      
+      - name: 'Set up Python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: 'Install dependencies'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: 'Generate ICS file'
+        run: |
+          python main.py
+          echo "ICS file generated successfully"
+      
+      - name: 'Check for changes'
+        id: check-changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected:"
+            git diff --stat
+          fi
+      
+      - name: 'Commit and push changes'
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add kzz.ics
+          git commit -m "🤖 Auto-update ICS file - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          git push
+      
+      - name: 'Display ICS content'
+        if: always()
+        run: |
+          if [ -f "kzz.ics" ]; then
+            echo "=== ICS File Content ==="
+            cat kzz.ics
+            echo "=== End of ICS File ==="
+          else
+            echo "❌ ICS file not found!"
+          fi
+      
+      - name: 'Summary'
+        if: always()
+        run: |
+          if [ "${{ steps.check-changes.outputs.changes }}" == "true" ]; then
+            echo "✅ ICS file updated and committed successfully"
+          else
+            echo "ℹ️ No changes detected, no commit needed"
+          fi
